@@ -1,3 +1,4 @@
+
 package com.addressbook.service;
 
 import java.io.BufferedReader;
@@ -7,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -229,4 +231,28 @@ public class AddressBook {
 	    }
 	}
 	
+	//UC 18
+	// Retrieve contacts from database
+	public void getContactsFromDatabase() {
+
+	    String sql = "SELECT * FROM person_contact";
+
+	    try (Connection connection = DatabaseConnection.getConnection();
+	         PreparedStatement statement = connection.prepareStatement(sql);
+	         ResultSet resultSet = statement.executeQuery()) {
+
+	        while (resultSet.next()) {
+
+	            String firstName = resultSet.getString("first_name");
+	            String lastName = resultSet.getString("last_name");
+	            String city = resultSet.getString("city");
+	            String phone = resultSet.getString("phone");
+
+	            System.out.println(firstName + " " + lastName + " | " + city + " | " + phone);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 }
